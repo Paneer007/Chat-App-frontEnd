@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const SearchBar=({setSearch})=>{
     return(
@@ -18,7 +18,7 @@ const triggerPopup =()=>{
 const AddGroupButton=()=>{
     return(
         <div class="d-flex align-items-center justify-content-center ">
-            <span class="material-symbols-outlined text-black" onClick={()=>{triggerPopup()}}>
+            <span class="material-symbols-outlined text-black" onClick={()=>{triggerPopup()}} >
                 add
             </span>
         </div>
@@ -111,6 +111,7 @@ const PopUpMenu =({setUser})=>{
         </div>
     )
 }
+
 const GroupSideDescription =({groupDetails,setGroup})=>{
     const getGroupData=async()=>{
         console.log(groupDetails)
@@ -151,18 +152,27 @@ const GroupSideDescription =({groupDetails,setGroup})=>{
     )
 }
 
+const UserHeader=({userData})=>{
+    console.log(userData)
+    return(
+        <div className="d-flex p-2 flex-row align-items-center justify-content-between bg-space w-100 m-0 titleShadow backgroundForAppPage text-white">
+            <div>
+                <p>{userData.Name}</p>
+            </div>
+            <div>
+                <span class="material-symbols-outlined text-white" data-bs-toggle="offcanvas" href="#userDataButton" role="button" aria-controls="userDataButton">
+                    settings
+                </span>
+            </div>
+        </div>
+    )
+}
+
 const SideBar =({userData,setUser,setGroup})=>{
     const [search,setSearch] = useState('')
     return(
         <div className="col-3 flex-column align-item-start justify-content-start p-0 text-applegrey backgroundForAppPage">
-            <div className="row align-item-start justify-content-start bg-space w-100 m-0 titleShadow backgroundForAppPage">
-                <div>
-                    user profile pic maybe initials
-                </div>
-                <div>
-                    user settings
-                </div>
-            </div>
+            <UserHeader userData={userData}/>
             <div className="d-flex flex-column align-items-center justify-content-start gap-3 py-3 px-1">
                 <div className="d-flex shadow align-items-center justify-content-between px-2 py-1 rounded-pill bg-white w-100">
                     <SearchBar setSearch={setSearch}/>
@@ -173,7 +183,26 @@ const SideBar =({userData,setUser,setGroup})=>{
                 </div>
             </div>
             <PopUpMenu setUser={setUser}/>
+            <UserDescriptionPage userDetail={userData}/>
         </div>
     )
 }
+
+const UserDescriptionPage =({userDetail})=>{
+    console.log(userDetail)
+    const navigator = useNavigate()
+    const logOutUser=()=>{
+        localStorage.removeItem('token')
+        navigator('/login')
+    }
+    return(
+        <div class="offcanvas offcanvas-end text-black" tabindex="-1" id="userDataButton" aria-labelledby="userDataButtonLabel">
+            <p>Profile Pic</p>
+            <p>{userDetail.Name}</p>
+            <p>{userDetail.Bio}</p>
+            <p onClick={logOutUser}>Logout</p>
+        </div>
+    )
+}
+
 export default SideBar

@@ -5,7 +5,7 @@ const ContactProfilePage =({group})=>{
     return (
         <div className="titleShadow w-100 d-flex justify-content-between align-items-center px-2">
             <div>
-                user profile pic maybe initials
+                user proffile pic maybe initials
             </div>
             <span class="material-icons" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                 info
@@ -14,15 +14,16 @@ const ContactProfilePage =({group})=>{
     )
 }
 const MessageBody =({messageList})=>{
+    console.log(messageList)
     return(
         <div>
-            {messageList.map(x=><p>{x}</p>)}
+            {messageList.map(x=><p>{x.message}</p>)}
         </div>
     )
 }
-const SendMessage=({socket,messageList,setMessageList})=>{
+const SendMessage=({socket,messageList,setMessageList,user})=>{
     const sendMessage =()=>{
-        socket.emit("send-message",message)
+        socket.emit("send-message",{message:message,name:user.Name})
     }
     const [message,setMessage] = useState('')
     console.log(message)
@@ -63,14 +64,16 @@ const GroupDescriptionPage =({group})=>{
         </div>
     )
 }
-const MainGroupPage=({group,socket})=>{
+const MainGroupPage=({user,group,socket,messageList,setMessageList})=>{
     useEffect(()=>{
         socket.on('sent-message',(msg)=>{
+            console.log('Event Triggered')
             console.log(messageList)
-            setMessageList([...messageList,msg])
+            console.log(...messageList)
+            let finalMessage = messageList.concat(msg)
+            setMessageList(finalMessage)
         })
     },[])
-    const [messageList,setMessageList] = useState([])
     useEffect(()=>{
         const joinGroup = async()=>{
             if(group==='Buffer'|| group===undefined){
@@ -81,6 +84,8 @@ const MainGroupPage=({group,socket})=>{
         }
         joinGroup()
     },[group])
+    
+    console.log(messageList)
     if(group==='Buffer'|| group===undefined){
         return(
             <div className="col-9 p-0 d-flex flex-column justify-content-between align-items-center h-100 bg-space text-applegrey">
@@ -94,7 +99,7 @@ const MainGroupPage=({group,socket})=>{
         <div className="col-9 p-0 d-flex flex-column justify-content-between bg-space text-applegrey">
             <ContactProfilePage group={group}/>
             <MessageBody messageList={messageList}/>
-            <SendMessage socket={socket} messageList={messageList} setMessageList={setMessageList}/>
+            <SendMessage user={user} socket={socket} messageList={messageList} setMessageList={setMessageList}/>
             <GroupDescriptionPage group={group}/>
         </div>
     )

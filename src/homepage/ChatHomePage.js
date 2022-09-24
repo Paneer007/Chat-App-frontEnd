@@ -12,6 +12,7 @@ const ChatHomePage = () =>{
     const navigator = useNavigate()
     const [user,setUser] = useState(undefined)
     const [group,setGroup] = useState(undefined)
+    const [messageList,setMessageList] = useState([])
     useEffect(()=>{
         const getUserData =async ()=>{
             const token = localStorage.getItem('token')  
@@ -21,27 +22,43 @@ const ChatHomePage = () =>{
                 return
             }
             const resp = await axios.get("http://localhost:3001/api/userdata",{headers:{"authorization":token}})
-            if(resp.status!=200){
+            if(resp.status!==200){
                 navigator('../')
                 return
             }
             console.log(resp)
             setUser(resp.data)
         }
-        //joinSocket()
         getUserData()
     },[])
     useEffect(()=>{
-        socket = io("http://localhost:3001")
-        socket.on('connect',()=>{
-            console.log('connected')
-        })
+        console.log('Im working on it')
+        console.log(messageList)
+    },[messageList])
+    useEffect(()=>{
+        try{
+            socket = io("http://localhost:3001",{query:`name=${user.Name}`})
+            socket.on('connect',()=>{
+                console.log('connected')
+            })
+            socket.on('sent-message',(msg)=>{
+                console.log('Event Triggered')
+                console.log(messageList)
+                console.log(...messageList)
+                let finalMessage = messageList.concat(msg)
+                console.log(finalMessage)
+                setMessageList(finalMessage)
+            })
         return ()=>{
             socket.off('connect')
             console.log('bai')
         }
-    },[])
-    if(user==undefined){
+        }catch(e){
+            console.log(e)
+        }
+        
+    },[user])
+    if(user===undefined){
         return(
             <div>
                 Please wait
@@ -53,7 +70,7 @@ const ChatHomePage = () =>{
             <SideBar userData={user} setUser={setUser} setGroup={setGroup}/>
             <Routes>
                 <Route path="/" element={<SelectGroup/>}/>
-                <Route path="group/:groupname" element={<MainGroupPage group={group} socket={socket}/>}/>
+                <Route path="group/:groupname" element={<MainGroupPage user={user} group={group} socket={socket} messageList={messageList} setMessageList={setMessageList}/>}/>
                 <Route path="user/:username" element={<MainUserPage/>}/>
             </Routes>
         </div>
