@@ -13,7 +13,7 @@ const ContactProfilePage =({group})=>{
         </div>
     )
 }
-const MessageBody =({messageList})=>{
+const MessageBody  =({messageList})=>{
     console.log(messageList)
     return(
         <div>
@@ -21,14 +21,14 @@ const MessageBody =({messageList})=>{
         </div>
     )
 }
-const SendMessage=({socket,messageList,setMessageList,user})=>{
+const SendMessage=({group,socket,messageList,user})=>{
     const sendMessage =()=>{
-        socket.emit("send-message",{message:message,name:user.Name})
+        socket.emit("sendMessage",{message:message,room:group.RoomId,name:user.Name})
     }
     const [message,setMessage] = useState('')
     console.log(message)
     return(
-        <div className="d-flex justify-content-between align-items-center bg-white m-2 px-2 py-2 rounded-pill" onChange={(e)=>setMessage(e.target.value)}>
+        <div className="d-flex justify-content-between align-items-center bg-white m-2 px-2 py-2 rounded-pill" onChange={(e)=>{setMessage(e.target.value);console.log(messageList)}}>
             <input className="w-75 border-0" placeholder="Enter your message"/>
             <span class="material-symbols-outlined text-black" onClick={sendMessage}>
                 send
@@ -64,22 +64,21 @@ const GroupDescriptionPage =({group})=>{
         </div>
     )
 }
-const MainGroupPage=({user,group,socket,messageList,setMessageList})=>{
-    useEffect(()=>{
-        socket.on('sent-message',(msg)=>{
-            console.log('Event Triggered')
-            console.log(messageList)
-            console.log(...messageList)
-            let finalMessage = messageList.concat(msg)
-            setMessageList(finalMessage)
-        })
-    },[])
+const MainGroupPage=({user,group,socket,messageList})=>{
+    // socket.on('sentMessage',(msg)=>{
+    //     console.log('Event Triggered')
+    //     console.log(messageList)
+    //     let finalMessage = messageList.concat(msg)
+    //     console.log('hi')
+    //     setMessageList(finalMessage)
+    // })
     useEffect(()=>{
         const joinGroup = async()=>{
             if(group==='Buffer'|| group===undefined){
                 console.log('Nothing is happening')
             }else{
-                socket.emit("join-room",group.RoomId)
+                console.log(group.RoomId)
+                socket.emit("joinRoom",group.RoomId)
             }  
         }
         joinGroup()
@@ -99,7 +98,7 @@ const MainGroupPage=({user,group,socket,messageList,setMessageList})=>{
         <div className="col-9 p-0 d-flex flex-column justify-content-between bg-space text-applegrey">
             <ContactProfilePage group={group}/>
             <MessageBody messageList={messageList}/>
-            <SendMessage user={user} socket={socket} messageList={messageList} setMessageList={setMessageList}/>
+            <SendMessage group={group} user={user} socket={socket} messageList={messageList} />
             <GroupDescriptionPage group={group}/>
         </div>
     )

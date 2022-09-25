@@ -7,6 +7,7 @@ import MainGroupPage from "./chatcomponents/MainPageGroup"
 import MainUserPage from "./chatcomponents/MainUserPage";
 import SideBar from "./chatcomponents/SideBar"
 import SelectGroup from "./chatcomponents/SelectGroup";
+import socketEvents from "../services/socket.io/socketEvents"
 let socket
 const ChatHomePage = () =>{
     const navigator = useNavigate()
@@ -38,17 +39,20 @@ const ChatHomePage = () =>{
     useEffect(()=>{
         try{
             socket = io("http://localhost:3001",{query:`name=${user.Name}`})
-            socket.on('connect',()=>{
-                console.log('connected')
-            })
-            socket.on('sent-message',(msg)=>{
-                console.log('Event Triggered')
-                console.log(messageList)
-                console.log(...messageList)
-                let finalMessage = messageList.concat(msg)
-                console.log(finalMessage)
-                setMessageList(finalMessage)
-            })
+            // socket.on('connect',()=>{
+            //     console.log('connected')
+            // })
+            // socket.on('sent-message',(msg)=>{
+            //     console.log('Event Triggered')
+            //     console.log(messageList)
+            //     console.log(...messageList)
+            //     let finalMessage = messageList.concat(msg)
+            //     console.log(finalMessage)
+            //     setMessageList(finalMessage)
+            // })
+
+            
+            socketEvents(socket,setMessageList,messageList)
         return ()=>{
             socket.off('connect')
             console.log('bai')
@@ -70,7 +74,7 @@ const ChatHomePage = () =>{
             <SideBar userData={user} setUser={setUser} setGroup={setGroup}/>
             <Routes>
                 <Route path="/" element={<SelectGroup/>}/>
-                <Route path="group/:groupname" element={<MainGroupPage user={user} group={group} socket={socket} messageList={messageList} setMessageList={setMessageList}/>}/>
+                <Route path="group/:groupname" element={<MainGroupPage user={user} group={group} socket={socket} messageList={messageList} />}/>
                 <Route path="user/:username" element={<MainUserPage/>}/>
             </Routes>
         </div>
