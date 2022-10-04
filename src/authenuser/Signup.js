@@ -2,15 +2,15 @@ import {Link,useNavigate} from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
 const Signup=()=>{
-    const [username,setUsername] = useState('')
+    const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
     const navigator = useNavigate()
     const signupToSite = async()=>{
         const body={
-            Name:username,Password:password
+            Email:email,Password:password
         }
-        if(!(username&&password)){
-            alert("Enter a username and a password")
+        if(!(email&&password)){
+            alert("Enter a email and a password")
             return 
         }
         const resp = await axios.post("http://localhost:3001/api/signup/",body)
@@ -29,8 +29,8 @@ const Signup=()=>{
                 </div>
                 <div className="TypesOfInput">
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="floatingInput" placeholder="username" onChange={(e)=>setUsername(e.target.value)}/>
-                        <label for="floatingInput">Username</label>
+                        <input class="form-control" id="floatingInput" placeholder="email" onChange={(e)=>setEmail(e.target.value)}/>
+                        <label for="floatingInput">email</label>
                     </div>
                     <div class="form-floating">
                         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" onChange={(e)=>setPassword(e.target.value)}/>

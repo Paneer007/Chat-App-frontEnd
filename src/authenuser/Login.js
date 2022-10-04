@@ -24,16 +24,16 @@ const Login =()=>{
                 return;
         }
     }
-    const [name,setName] = useState('')
+    const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
     const navigate = useNavigate()
     const [extpopup,setExtpopup] = useState(undefined)
 
     const loginToSite = async()=>{
         const body={
-            Name:name,Password:password
+            Email:email,Password:password
         }
-        if(!(name&&password)){
+        if(!(email&&password)){
             alert("Enter a username and a password")
             return 
         }
@@ -85,8 +85,8 @@ const Login =()=>{
                 </div>
                 <div className="TypesOfInput">
                     <div class="form-floating mb-3">
-                        <input class="form-control" id="floatingInput" placeholder="username" onChange={(e)=>setName(e.target.value)}/>
-                        <label for="floatingInput">Username</label>
+                        <input class="form-control" id="floatingInput" placeholder="username" onChange={(e)=>setEmail(e.target.value)}/>
+                        <label for="floatingInput">Email</label>
                     </div>
                     <div class="form-floating">
                         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" onChange={(e)=>setPassword(e.target.value)}/>
