@@ -1,10 +1,12 @@
 .backgroundForSignup{
     background-image: url("../images/loginBackground.png");
 }
+
 .backgroundForAppPage{
     background-image: url("../images/loginBackground.png");
     box-shadow: inset 0 0 0 1000px rgba(0,0,0,.4);
 }
+
 @import "../../node_modules/bootstrap/scss/_functions";
 @import "../../node_modules/bootstrap/scss/variables";
 $custom-theme-colors: (
@@ -22,4 +24,28 @@ $theme-colors : map-merge($custom-theme-colors , $theme-colors);
 }
 .zIndex{
    z-index: 2000; 
+}
+.messageDimensions{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    max-width: 20vw;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #00ADB5;
+    margin: 2px 2px;
+    padding:6px 24px 6px 6px;
+    align-self: flex-start;
+    border-radius: 8px;
+}
+.userMessage{
+    align-self: flex-end;
+}
+.scrollableMessages{
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+.scrollableMessages::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }

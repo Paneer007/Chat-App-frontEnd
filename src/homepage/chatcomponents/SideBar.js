@@ -1,6 +1,7 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useState ,useContext} from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { SocketContext } from "../../context/socket"
 
 const SearchBar=({setSearch})=>{
     return(
@@ -142,7 +143,7 @@ const GroupSideDescription =({groupDetails,setGroup})=>{
                 <div class="col-md-8">
                     <div class="card-body p-0">
                         <h5 class="text-black">{groupDetails.Name}</h5>
-                        <p class="card-text"><small class="text-muted">Last Message</small></p>
+                        <p class="card-text"><small class="text-muted">{groupDetails.LastMessage ===undefined?null:groupDetails.LastMessage.name + ' : '} {groupDetails.LastMessage===undefined?null:groupDetails.LastMessage.message}</small></p>
                     </div>
                 </div>
             </div>
@@ -178,7 +179,7 @@ const SideBar =({userData,setUser,setGroup})=>{
                     <SearchBar setSearch={setSearch}/>
                     <AddGroupButton/>
                 </div>
-                <div className="w-100 px-3 overflow-scroll">
+                <div className="w-100 px-3 scrollableMessages">
                     {userData.Groups.map(x=><GroupSideDescription groupDetails={x} setGroup={setGroup}/>)}
                 </div>
             </div>

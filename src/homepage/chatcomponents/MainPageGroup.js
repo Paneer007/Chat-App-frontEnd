@@ -1,11 +1,15 @@
-import { useState } from "react"
-import { useEffect } from "react"
+import { useState,useEffect ,useContext} from "react"
+import { SocketContext } from "../../context/socket"
 
-const ContactProfilePage =({group})=>{
+const ContactProfilePage =({group,sender})=>{
+    console.log(group,sender)
     return (
         <div className="titleShadow w-100 d-flex justify-content-between align-items-center px-2">
             <div>
-                user proffile pic maybe initials
+                user profile pic maybe initials
+            </div>
+            <div>
+                {sender!==undefined?sender.name:null}
             </div>
             <span class="material-icons" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                 info
@@ -13,23 +17,59 @@ const ContactProfilePage =({group})=>{
         </div>
     )
 }
-const MessageBody  =({messageList})=>{
-    console.log(messageList)
+const MessageFormat=({data,user})=>{
+    const classType="messageDimensions "+(data.name===user.Name ?"userMessage":null)
     return(
-        <div>
-            {messageList.map(x=><p>{x.message}</p>)}
+        <div className={classType}>
+            <div>
+                <p className="fw-bold">{data.name}</p>
+            </div>
+            <div>
+                <p className="fw-normal">{data.message}</p>
+            </div>
+        </div>
+    )
+
+}
+const MessageBody  =({messageList,user})=>{
+    useEffect(()=>{
+        const messageListDiv = document.getElementById("messageListDiv")
+        messageListDiv.scrollTop=(messageListDiv.scrollHeight)
+    },[messageList])
+    return(
+        <div id="messageListDiv" className="d-flex flex-column mx-2 my-2 overflow-auto scrollableMessages">
+            {messageList.map(x=><MessageFormat data={x} user={user}/>)}
         </div>
     )
 }
-const SendMessage=({group,socket,messageList,user})=>{
-    const sendMessage =()=>{
-        socket.emit("sendMessage",{message:message,room:group.RoomId,name:user.Name})
+const SendMessage=({group,messageList,user})=>{
+    const socket = useContext(SocketContext)
+    const updateText=(e)=>{
+        setMessage(e.target.value)
+        socket.emit('isTyping',{name:user.Name,room:group.RoomId})
     }
+    const sendMessage =()=>{
+        socket.emit("sendMessage",{message:message,room:group.RoomId,name:user.Name,user:user._id})
+    }
+    
+    useEffect(()=>{
+        const inputBox = document.getElementById("inputMessageBox")
+        function debounce(callback, wait) {
+            let timeout;
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(function () { callback.apply(this, args); }, wait);
+            };
+          }
+          
+          inputBox.addEventListener('keyup', debounce( () => {
+              socket.emit('noMessageSent',{room:group.RoomId})
+          }, 1000))
+    },[])
     const [message,setMessage] = useState('')
-    console.log(message)
     return(
-        <div className="d-flex justify-content-between align-items-center bg-white m-2 px-2 py-2 rounded-pill" onChange={(e)=>{setMessage(e.target.value);console.log(messageList)}}>
-            <input className="w-75 border-0" placeholder="Enter your message"/>
+        <div  className="d-flex justify-content-between align-items-center bg-white m-2 px-2 py-2 rounded-pill" onChange={(e)=>updateText(e)}>
+            <input id="inputMessageBox" className="w-75 border-0" placeholder="Enter your message"/>
             <span class="material-symbols-outlined text-black" onClick={sendMessage}>
                 send
             </span>
@@ -64,27 +104,21 @@ const GroupDescriptionPage =({group})=>{
         </div>
     )
 }
-const MainGroupPage=({user,group,socket,messageList})=>{
-    // socket.on('sentMessage',(msg)=>{
-    //     console.log('Event Triggered')
-    //     console.log(messageList)
-    //     let finalMessage = messageList.concat(msg)
-    //     console.log('hi')
-    //     setMessageList(finalMessage)
-    // })
+const MainGroupPage=({user,group,messageList,sender})=>{
+    const socket = useContext(SocketContext)
     useEffect(()=>{
         const joinGroup = async()=>{
             if(group==='Buffer'|| group===undefined){
                 console.log('Nothing is happening')
             }else{
-                console.log(group.RoomId)
                 socket.emit("joinRoom",group.RoomId)
             }  
         }
         joinGroup()
     },[group])
-    
-    console.log(messageList)
+    useEffect(()=>{
+        console.log('the updated messageList is',messageList)
+    },[messageList])
     if(group==='Buffer'|| group===undefined){
         return(
             <div className="col-9 p-0 d-flex flex-column justify-content-between align-items-center h-100 bg-space text-applegrey">
@@ -96,9 +130,9 @@ const MainGroupPage=({user,group,socket,messageList})=>{
     }
     return(
         <div className="col-9 p-0 d-flex flex-column justify-content-between bg-space text-applegrey">
-            <ContactProfilePage group={group}/>
-            <MessageBody messageList={messageList}/>
-            <SendMessage group={group} user={user} socket={socket} messageList={messageList} />
+            <ContactProfilePage group={group} sender={sender}/>
+            <MessageBody messageList={messageList} user={user}/>
+            <SendMessage group={group} user={user} messageList={messageList} />
             <GroupDescriptionPage group={group}/>
         </div>
     )
