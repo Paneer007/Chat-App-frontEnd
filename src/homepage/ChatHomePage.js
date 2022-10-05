@@ -8,6 +8,8 @@ import SideBar from "./chatcomponents/SideBar"
 import SelectGroup from "./chatcomponents/SelectGroup";
 import {socketEvents,destroyEvents} from "../services/socket.io/socketEvents"
 import {socket,SocketContext} from "../context/socket"
+import { groupSocketEvents } from "../services/socket.io/groupEvents";
+import NewUser from "./newUser/NewUser";
 let actualSocket;
 const ChatHomePage = () =>{
     const navigator = useNavigate()
@@ -42,6 +44,7 @@ const ChatHomePage = () =>{
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 actualSocket=socket(user);
                 socketEvents(actualSocket,setMessageList,messageList,setSender)
+                groupSocketEvents(actualSocket,user,setUser,setSender)
                 setSocketObj(actualSocket)
             return ()=>{
                 destroyEvents(actualSocket);
@@ -50,6 +53,11 @@ const ChatHomePage = () =>{
                 console.log(e)
             }
         }        
+    },[user])
+    useEffect(()=>{
+        if(user!==undefined && user.Name===undefined){
+            navigator('newuser')
+        }
     },[user])
     useEffect(()=>{
         if(group === "Buffer" || group=== undefined){
@@ -73,6 +81,7 @@ const ChatHomePage = () =>{
                 <Route path="/" element={<SelectGroup/>}/>
                 <Route path="group/:groupname" element={<MainGroupPage user={user} group={group} messageList={messageList} sender={sender}/>}/>
                 <Route path="user/:username" element={<MainUserPage/>}/>
+                <Route path="newuser" element={<NewUser/>}/>
             </Routes>
         </div>
     </SocketContext.Provider>

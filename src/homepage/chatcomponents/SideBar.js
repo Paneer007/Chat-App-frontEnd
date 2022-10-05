@@ -1,4 +1,5 @@
 import axios from "axios"
+import { useEffect } from "react"
 import { useState ,useContext} from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { SocketContext } from "../../context/socket"
@@ -15,6 +16,7 @@ const triggerPopup =()=>{
     const theCard = document.getElementById("theCardContent")
     theCard.classList.toggle("invisible")
 }
+
 
 const AddGroupButton=()=>{
     return(
@@ -114,6 +116,7 @@ const PopUpMenu =({setUser})=>{
 }
 
 const GroupSideDescription =({groupDetails,setGroup})=>{
+    const socket = useContext(SocketContext)
     const getGroupData=async()=>{
         console.log(groupDetails)
         try{
@@ -133,6 +136,8 @@ const GroupSideDescription =({groupDetails,setGroup})=>{
             console.log(e)
         }
     }
+    useEffect(()=>{
+    },[])
     return(
     <Link onClick={()=>getGroupData()} to={"group/"+groupDetails.Name}>
         <div class="card mb-3 w-100">

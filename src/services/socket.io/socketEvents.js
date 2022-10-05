@@ -1,6 +1,6 @@
 let LocalMessageList=undefined
 const socketEvents=async(socket,setMessageList,messageList,setSender)=>{
-    let LocalMessageList=messageList
+    LocalMessageList=messageList
     socket.on('connect',()=>{
         console.log('connected')
     })
@@ -14,6 +14,7 @@ const socketEvents=async(socket,setMessageList,messageList,setSender)=>{
         console.log('duh',sender)
         setSender(sender)
     })
+    
 }
 const updateMessageListArray=(newArray)=>{
     LocalMessageList=newArray

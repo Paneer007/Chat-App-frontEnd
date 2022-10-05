@@ -2,7 +2,6 @@ import { useState,useEffect ,useContext} from "react"
 import { SocketContext } from "../../context/socket"
 
 const ContactProfilePage =({group,sender})=>{
-    console.log(group,sender)
     return (
         <div className="titleShadow w-100 d-flex justify-content-between align-items-center px-2">
             <div>
@@ -47,9 +46,11 @@ const SendMessage=({group,messageList,user})=>{
     const updateText=(e)=>{
         setMessage(e.target.value)
         socket.emit('isTyping',{name:user.Name,room:group.RoomId})
+        socket.emit('isTypingMain',{name:user.Name,room:group.GroupId})
     }
     const sendMessage =()=>{
         socket.emit("sendMessage",{message:message,room:group.RoomId,name:user.Name,user:user._id})
+        socket.emit("sendMessageMain",{message:message,room:group.GroupId,name:user.Name})
     }
     
     useEffect(()=>{
@@ -64,6 +65,7 @@ const SendMessage=({group,messageList,user})=>{
           
           inputBox.addEventListener('keyup', debounce( () => {
               socket.emit('noMessageSent',{room:group.RoomId})
+              socket.emit('noMessageSentMain',{room:group.GroupId})
           }, 1000))
     },[])
     const [message,setMessage] = useState('')
