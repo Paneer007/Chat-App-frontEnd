@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect } from "react"
 import { useState ,useContext} from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { SocketContext } from "../../context/socket"
+import { socket, SocketContext } from "../../context/socket"
 
 const SearchBar=({setSearch})=>{
     return(
@@ -17,7 +17,6 @@ const triggerPopup =()=>{
     theCard.classList.toggle("invisible")
 }
 
-
 const AddGroupButton=()=>{
     return(
         <div class="d-flex align-items-center justify-content-center ">
@@ -29,7 +28,7 @@ const AddGroupButton=()=>{
 }
 
 const PopUpMenu =({setUser})=>{
-
+    let socket = useContext(SocketContext)
     const submitGroupDetails =async()=>{
         const body ={group:group,description:desc}
         setBuffer(true)
@@ -41,6 +40,9 @@ const PopUpMenu =({setUser})=>{
             }
             const resp = await axios.post("http://localhost:3001/api/groupdata/newgroup",body,{headers:{"authorization":token}})
             const userData = await axios.get("http://localhost:3001/api/userdata",{headers:{"authorization":token}})
+            console.log("this is the user data",userData)
+            console.log("This is the group Data".resp.data)
+            socket.emit('newUserRoom',{groupId:resp.data.GeneralId,Name:resp.data.Name})
             setBuffer(false)
             setUser(userData.data)
         }catch(e){
@@ -138,12 +140,16 @@ const GroupSideDescription =({groupDetails,setGroup})=>{
     }
     useEffect(()=>{
     },[])
+    console.log(groupDetails)
     return(
     <Link onClick={()=>getGroupData()} to={"group/"+groupDetails.Name}>
         <div class="card mb-3 w-100">
             <div class="row g-0">
                 <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
                     <p className="bg-ithinkteal p-4 rounded-circle d-flex flex-column justify-content-center align-items-center "></p>
+                </div>
+                <div>
+                    <p>{!groupDetails.LastMessageSender?"no new message":groupDetails.LastMessageSender +' is typing'}</p>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body p-0">
@@ -195,7 +201,6 @@ const SideBar =({userData,setUser,setGroup})=>{
 }
 
 const UserDescriptionPage =({userDetail})=>{
-    console.log(userDetail)
     const navigator = useNavigate()
     const logOutUser=()=>{
         localStorage.removeItem('token')

@@ -8,7 +8,7 @@ import SideBar from "./chatcomponents/SideBar"
 import SelectGroup from "./chatcomponents/SelectGroup";
 import {socketEvents,destroyEvents} from "../services/socket.io/socketEvents"
 import {socket,SocketContext} from "../context/socket"
-import { groupSocketEvents } from "../services/socket.io/groupEvents";
+import { groupSocketEvents,destroyGroupEvents } from "../services/socket.io/groupEvents";
 import NewUser from "./newUser/NewUser";
 let actualSocket;
 const ChatHomePage = () =>{
@@ -47,6 +47,7 @@ const ChatHomePage = () =>{
                 groupSocketEvents(actualSocket,user,setUser,setSender)
                 setSocketObj(actualSocket)
             return ()=>{
+                destroyGroupEvents(actualSocket)
                 destroyEvents(actualSocket);
             }
             }catch(e){
@@ -81,7 +82,7 @@ const ChatHomePage = () =>{
                 <Route path="/" element={<SelectGroup/>}/>
                 <Route path="group/:groupname" element={<MainGroupPage user={user} group={group} messageList={messageList} sender={sender}/>}/>
                 <Route path="user/:username" element={<MainUserPage/>}/>
-                <Route path="newuser" element={<NewUser/>}/>
+                <Route path="newuser" element={<NewUser setUser={setUser}/>}/>
             </Routes>
         </div>
     </SocketContext.Provider>

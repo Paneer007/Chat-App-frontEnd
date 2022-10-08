@@ -10,6 +10,7 @@ const NewUserTitle =({group,sender})=>{
         </div>
     )
 }
+
 const NewUser = ({setUser}) =>{
     return(
         <div className="col-9 p-0 d-flex flex-column bg-space text-applegrey">
@@ -18,7 +19,8 @@ const NewUser = ({setUser}) =>{
         </div>
     )
 }
-const FormDetails=(setUser)=>{
+
+const FormDetails=({setUser})=>{
     const [bio,setBio]=useState('')
     const [name,setName]=useState('')
     const navigator = useNavigate()
@@ -49,24 +51,25 @@ const FormDetails=(setUser)=>{
     }
     return(
     <div className="h-100 w-100 d-flex flex-column justify-content-center align-items-center">
-<form className="w-50 p-2 bg-white border shadow rounded">
-    {/* <div>
-        <p>Upload your image here</p>
-    </div> */}
-    
-    <div>
-        <div class="mb-3 text-primary">
-            <label for="exampleInputName1" class="form-label">Name</label>
-            <input type="Name" class="form-control" id="exampleInputName1" aria-describedby="NameHelp" onChange={(e)=>setName(e.target.value)}/>
-        </div>
-        <div class="mb-3 text-primary">
-            <label for="exampleInputPassword1" class="form-label">Bio</label>
-            <input type="Bio" class="form-control" id="exampleInputBio1" onChange={(e)=>setBio(e.target.value)}/>
-        </div>
-        <button type="submit" class="btn btn-primary" onClick={submitUserDetails}>Submit</button>
-    </div>
-</form>
+        <form className="w-50 p-2 bg-white border shadow rounded">
+            {/* <div>
+                <p>Upload your image here</p>
+            </div> */}
+            
+            <div>
+                <div class="mb-3 text-primary">
+                    <label for="exampleInputName1" class="form-label">Name</label>
+                    <input type="Name" class="form-control" id="exampleInputName1" aria-describedby="NameHelp" onChange={(e)=>setName(e.target.value)}/>
+                </div>
+                <div class="mb-3 text-primary">
+                    <label for="exampleInputPassword1" class="form-label">Bio</label>
+                    <input type="Bio" class="form-control" id="exampleInputBio1" onChange={(e)=>setBio(e.target.value)}/>
+                </div>
+                <button type="submit" class="btn btn-primary" onClick={submitUserDetails}>Submit</button>
+            </div>
+        </form>
     </div>
          )
 }
+
 export default NewUser

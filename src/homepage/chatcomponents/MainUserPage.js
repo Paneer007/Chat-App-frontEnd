@@ -11,6 +11,7 @@ const ContactProfilePage =()=>{
         </div>
     )
 }
+
 const MessageBody =()=>{
     return(
         <div>
@@ -18,6 +19,7 @@ const MessageBody =()=>{
         </div>
     )
 }
+
 const SendMessage=()=>{
     return(
         <div>
@@ -25,6 +27,7 @@ const SendMessage=()=>{
         </div>
     )
 }
+
 const MainUserPage=()=>{
     return(
         <div className="col-9 p-0 d-flex flex-column justify-content-between bg-space text-applegrey">
@@ -34,4 +37,5 @@ const MainUserPage=()=>{
         </div>
     )
 }
+
 export default MainUserPage

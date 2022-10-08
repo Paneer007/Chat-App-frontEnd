@@ -28,7 +28,6 @@ const MessageFormat=({data,user})=>{
             </div>
         </div>
     )
-
 }
 const MessageBody  =({messageList,user})=>{
     useEffect(()=>{
@@ -46,11 +45,11 @@ const SendMessage=({group,messageList,user})=>{
     const updateText=(e)=>{
         setMessage(e.target.value)
         socket.emit('isTyping',{name:user.Name,room:group.RoomId})
-        socket.emit('isTypingMain',{name:user.Name,room:group.GroupId})
+        socket.emit('isTypingMain',{name:user.Name,room:group.GeneralId})
     }
     const sendMessage =()=>{
         socket.emit("sendMessage",{message:message,room:group.RoomId,name:user.Name,user:user._id})
-        socket.emit("sendMessageMain",{message:message,room:group.GroupId,name:user.Name})
+        socket.emit("sendMessageMain",{message:message,room:group.GeneralId,name:user.Name})
     }
     
     useEffect(()=>{
@@ -65,7 +64,7 @@ const SendMessage=({group,messageList,user})=>{
           
           inputBox.addEventListener('keyup', debounce( () => {
               socket.emit('noMessageSent',{room:group.RoomId})
-              socket.emit('noMessageSentMain',{room:group.GroupId})
+              socket.emit('noMessageSentMain',{room:group.GeneralId})
           }, 1000))
     },[])
     const [message,setMessage] = useState('')
@@ -108,12 +107,14 @@ const GroupDescriptionPage =({group})=>{
 }
 const MainGroupPage=({user,group,messageList,sender})=>{
     const socket = useContext(SocketContext)
+    console.log(group)
     useEffect(()=>{
         const joinGroup = async()=>{
             if(group==='Buffer'|| group===undefined){
                 console.log('Nothing is happening')
             }else{
                 socket.emit("joinRoom",group.RoomId)
+                socket.emit("joinGroupMain",group.GeneralId)
             }  
         }
         joinGroup()
