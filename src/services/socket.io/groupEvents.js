@@ -19,7 +19,7 @@ const groupSocketEvents=async(socket,user,setUser,setSender)=>{
     // }) 
     socket.on("whoTypingMain",async(sender)=>{
         console.log('this is the end')
-        console.log("hey ther whpre",sender)
+        console.log("hey ther whre",sender)
         console.log(LocalUser)
         try{
             let LocalGroups=LocalUser.Groups.map(x=>x.GeneralId === sender.groupId?{...x,LastMessageSender:sender.name}:x )
@@ -39,6 +39,6 @@ const updateMessageListArray=(newArray)=>{
 }
 const destroyGroupEvents=async(socket)=>{
     socket.off('connect');
-    socket.off('sentMessage')
+    //socket.off('sentMessage')
 }
 export {groupSocketEvents,destroyGroupEvents};

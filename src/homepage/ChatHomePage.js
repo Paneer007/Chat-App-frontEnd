@@ -61,6 +61,9 @@ const ChatHomePage = () =>{
         }
     },[user])
     useEffect(()=>{
+        console.log("THIS CHECKS RERENDER HAS BEEN DONE SUCCESFFULLFHSAHKFKASGHASGFHJGA")
+    },[user])
+    useEffect(()=>{
         if(group === "Buffer" || group=== undefined){
             return
         }

@@ -40,8 +40,6 @@ const PopUpMenu =({setUser})=>{
             }
             const resp = await axios.post("http://localhost:3001/api/groupdata/newgroup",body,{headers:{"authorization":token}})
             const userData = await axios.get("http://localhost:3001/api/userdata",{headers:{"authorization":token}})
-            console.log("this is the user data",userData)
-            console.log("This is the group Data".resp.data)
             socket.emit('newUserRoom',{groupId:resp.data.GeneralId,Name:resp.data.Name})
             setBuffer(false)
             setUser(userData.data)
@@ -181,6 +179,7 @@ const UserHeader=({userData})=>{
 }
 
 const SideBar =({userData,setUser,setGroup})=>{
+
     const [search,setSearch] = useState('')
     return(
         <div className="col-3 flex-column align-item-start justify-content-start p-0 text-applegrey backgroundForAppPage">

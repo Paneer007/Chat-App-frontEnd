@@ -40,7 +40,7 @@ const MessageBody  =({messageList,user})=>{
         </div>
     )
 }
-const SendMessage=({group,messageList,user})=>{
+const SendMessage=({group,setMessageList,user})=>{
     const socket = useContext(SocketContext)
     const updateText=(e)=>{
         setMessage(e.target.value)
