@@ -167,7 +167,10 @@ const UserHeader=({userData})=>{
     return(
         <div className="d-flex p-2 flex-row align-items-center justify-content-between bg-space w-100 m-0 titleShadow backgroundForAppPage text-white">
             <div>
-                <p>{userData.Name}</p>
+                <Link to={"aboutuser"}>
+                    <p>{userData.Name}</p>
+
+                </Link>
             </div>
             <div>
                 <span class="material-symbols-outlined text-white" data-bs-toggle="offcanvas" href="#userDataButton" role="button" aria-controls="userDataButton">

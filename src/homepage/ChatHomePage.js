@@ -10,6 +10,8 @@ import {socketEvents,destroyEvents} from "../services/socket.io/socketEvents"
 import {socket,SocketContext} from "../context/socket"
 import { groupSocketEvents,destroyGroupEvents } from "../services/socket.io/groupEvents";
 import NewUser from "./newUser/NewUser";
+import AboutUserPage from "./userPersonalPage/AboutUserPage";
+import EditUserPage from "./userPersonalPage/EditUserPage";
 let actualSocket;
 const ChatHomePage = () =>{
     const navigator = useNavigate()
@@ -61,9 +63,6 @@ const ChatHomePage = () =>{
         }
     },[user])
     useEffect(()=>{
-        console.log("THIS CHECKS RERENDER HAS BEEN DONE SUCCESFFULLFHSAHKFKASGHASGFHJGA")
-    },[user])
-    useEffect(()=>{
         if(group === "Buffer" || group=== undefined){
             return
         }
@@ -86,6 +85,8 @@ const ChatHomePage = () =>{
                 <Route path="group/:groupname" element={<MainGroupPage user={user} group={group} messageList={messageList} sender={sender}/>}/>
                 <Route path="user/:username" element={<MainUserPage/>}/>
                 <Route path="newuser" element={<NewUser setUser={setUser}/>}/>
+                <Route path="aboutuser" element={<AboutUserPage/>}/>
+                <Route path="edituser" element={<EditUserPage/>}/>
             </Routes>
         </div>
     </SocketContext.Provider>
