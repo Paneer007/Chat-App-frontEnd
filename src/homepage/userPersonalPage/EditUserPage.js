@@ -1,12 +1,13 @@
 
+import { useState } from "react"
 import { Link } from "react-router-dom"
 
 const HeaderAboutMe =()=>{
     return(
         <div className="titleShadow w-100 d-flex justify-content-between align-items-center px-2">
-            <p>About me</p>
+            <p>Edit PRofile</p>
             <Link to="../aboutuser">
-                <span class="material-symbols-outlined">
+                <span className="material-symbols-outlined">
                     close
                 </span>
             </Link>
@@ -16,28 +17,29 @@ const HeaderAboutMe =()=>{
 }
 
 const BodyAboutMe=()=>{
+    const [about,setAbout ]= useState('')
+    const [working,setWorking] = useState('')
+    const [imageData,setImageData] = useState('')
+    const [describe,setDescribe] = useState('')
     return(
-        <div className="h-75 d-flex flex-column justify-content-center px-2">
-            <div>
-                <div className="d-flex flex-row justify-content-between">
-                    <div>
-                        <p>Hi i am </p>
-                        <p>John Doe</p>
-                        <p>Software engineer</p>
-                    </div>
-                    <div>
-                        <p>Image Stuff</p>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam qui ad culpa magnam, deleniti nostrum quod recusandae placeat? Dignissimos nulla neque vero similique rerum rem atque excepturi delectus, et quod.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam qui ad culpa magnam, deleniti nostrum quod recusandae placeat? Dignissimos nulla neque vero similique rerum rem atque excepturi delectus, et quod.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam qui ad culpa magnam, deleniti nostrum quod recusandae placeat? Dignissimos nulla neque vero similique rerum rem atque excepturi delectus, et quod.</p>
-                    </div>
-                </div>
+        <div className="h-75 w-75 d-flex flex-column justify-content-center align-items-center px-2">
+            <div className="input-group mb-3">
+                <span className="input-group-text w-25"  id="basic-addon1">Introduce yourself</span>
+                <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"/>
             </div>
-    {/* Ok think about persons hobbies, personal site etc */}
+            <div className="input-group mb-3">
+                <span className="input-group-text w-25" id="basic-addon1">What are you working</span>
+                <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"/>
+            </div>
+            <div class="input-group mb-3">
+                <input type="file" className="form-control w-25" id="inputGroupFile02"/>
+                <label className="input-group-text" for="inputGroupFile02">Upload</label>
+            </div>
+
+            <div className="input-group">
+                <span className="input-group-text w-25">Describe yourself</span>
+                <textarea className="form-control" aria-label="With textarea"></textarea>
+            </div>
         </div>
     )
 }
