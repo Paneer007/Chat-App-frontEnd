@@ -25,11 +25,11 @@ const BodyAboutMe=()=>{
         <div className="h-75 w-75 d-flex flex-column justify-content-center align-items-center px-2">
             <div className="input-group mb-3">
                 <span className="input-group-text w-25"  id="basic-addon1">Introduce yourself</span>
-                <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"/>
+                <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1"/>
             </div>
             <div className="input-group mb-3">
                 <span className="input-group-text w-25" id="basic-addon1">What are you working</span>
-                <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"/>
+                <input type="text" className="form-control" aria-label="Username" aria-describedby="basic-addon1"/>
             </div>
             <div class="input-group mb-3">
                 <input type="file" className="form-control w-25" id="inputGroupFile02"/>
